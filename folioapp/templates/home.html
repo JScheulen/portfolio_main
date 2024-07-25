@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Johnathan Scheulen</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid text-center mt-5">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="row">
+                <span style="font-size: 40px; font-weight: bold;">Software Developer</span>
+                <span style="font-weight: bold;font-size: 50px;">Johnathan Scheulen</span>
+            </div>
+            <div class="row mt-2 p-2" style="font-size: 14px;">
+                <p>Full Stack Python - Django & Microsoft Power Platform</p>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-primary m-1 rounded-4"
+                       href="https://www.linkedin.com/in/johnathan-scheulen-209564256" target="_blank" style="width:120px">Linkedin
+                        &#129030</a>
+                    <a class="btn btn-primary m-1 rounded-4" style="width:120px">GitHub &#129030</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col pt-2" style="font-size: 30px; color:grey">
+                    <i class='bx bxl-python'></i>
+                    <i class='bx bxl-django'></i>
+                    <i class='bx bxl-microsoft'></i>
+                    <i class='bx bxl-postgresql'></i>
+                    <i class='bx bxl-javascript'></i>
+                    <i class='bx bxl-html5'></i>
+                    <i class='bx bxl-bootstrap'></i>
+                    <i class='bx bxl-github'></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<section class="py-5 mb-5 mt-5 shadow">
+    <div class="container">
+        <div class="row text-center pb-5">
+            <b style="font-weight: bold;font-size: 35px;" class="col-md-6 m-auto">Trabajos Recientes</b>
+        </div>
+        <div class="row gy-5 mb-4">
+            {% for item, imgaen in nuevo.items %}
+            <div class="carousel col-md-4 mb-3" id="demo{{ forloop.counter }}">
+
+
+                <div class="carousel-inner border-0 shadow-lg col" id="carta1">
+                    {% for img in imgaen %}
+                    <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                        <img style="opacity: 1;" src="{{ img.imgList.url }}" id="h335" class="w-100" alt="">
+                        <div class="carousel-caption mb-3 ml-3 text-dark">
+                            <h4 class="texto1 rounded-pill p-2">{{img.proyecto}}</h4>
+                            <p class="texto1 rounded-pill p-2" style="font-size: 15px;">{{img.imgDescript}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#demo{{ forloop.counter }}" data-bs-slide="prev">
+                        <span class="fas fa-angle-left" style="color:black;font-size: 28px"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#demo{{ forloop.counter }}" data-bs-slide="next">
+                        <span class="fas fa-angle-right" style="color:black;font-size: 28px"></span>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+</section>
+
+<script>
+    $(document).ready(function(){
+
+        $(".texto1").hide();
+        $('.carousel-inner').on('mouseover', function(){
+            $('.carousel-caption').animate({
+                bottom: '200px',
+
+            });
+            $(".texto1").css("background-color", "#3455eb");
+            $(".texto1").css("color", "#ffffff");
+            $(".texto1").show();
+
+
+
+        });
+    });
+
+</script>
+
+{% endblock %}
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exchange Currency</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .search-input {
+            display: none;
+        }
+        .dropdown-toggle-search-mode {
+            display: none;
+        }
+        .dropdown-menu {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .search-label {
+            display: block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+<br><br>
+<div class="container shadow mx-auto" style="width: 800px;">
+    <div class="row ml-2">
+        <div class="col p-2">
+            <label style="font-size:30px;">1 <span id="Valor1" style="color:DimGray; font-size:15px;"></span> = <span
+                    id="Valor"></span> <span id="coin1" style="color:DimGray; font-size:15px;"></span></label>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="row p-2">
+                <input type="number" id="currency1" class="input_c" placeholder="0">
+            </div>
+            <div class="row p-2">
+                <input type="number" id="currency2" class="input_c" placeholder="0">
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="row p-2">
+                <div class="input-group">
+                    <input type="text" class="search-input search-label dropdown-toggle" id="searchInput"
+                           data-bs-toggle="dropdown" value="USD - Dólar estadounidense">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-haspopup="true"></button>
+                    <div class="dropdown-menu" id="itemUno" aria-labelledby="dropdownMenuButton">
+                        {% for din in dinero %}
+                        <ul>
+                            <li class="dropdown-item dato1">{{din.moneda}} <span> - {{din.descripcion}}</span></li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row p-2">
+                <div class="input-group">
+                    <input type="text" class="search-input search-label dropdown-toggle" id="searchInput2"
+                           data-bs-toggle="dropdown" value="EUR - Euro">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2"
+                            data-bs-toggle="dropdown" aria-haspopup="true"></button>
+                    <div class="dropdown-menu" id="itemDos" aria-labelledby="dropdownMenuButton2">
+                        {% for din in dinero %}
+                        <ul>
+                            <li class="dropdown-item dato2" data-moneda="{{din.moneda}}">{{din.moneda}} <span> - {{din.descripcion}}</span>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2 d-flex justify-content-right align-items-center">
+            <i class="fas fa-retweet cambio_precio" style="font-size:50px;"></i>
+        </div>
+    </div>
+
+    <div class="row mt-5 ml-2">
+
+        <button class="btn btn-success mb-2" style="width: 100px;" type="button" id="subir_b"> Actualizar</button>
+
+    </div>
+
+
+</div>
+
+<div class="containder shadow mt-3 mx-auto" style="width: 800px;" id="grafico">
+
+
+</div>
+
+<div class="container">
+    <h2>Subir archivo Excel</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.file }}
+        <button type="submit">Subir</button>
+    </form>
+</div>
+
+
+<script>
+
+    //1. CALCULA EL VALOR INGRESADO A LA MONEDA REQUERIDA
+      $(document).ready(function(){
+          var pais3 = $('#searchInput').val();
+          var pais4 = $('#searchInput2').val();
+          $.ajax({
+              url: "{% url 'valormoneda' %}",
+              method: 'GET',
+              data: {
+                  pais1: pais3,
+                  pais2: pais4
+              },
+              success: function(data){
+                  $('#Valor').text(data.valor);
+                  $('#Valor1').text(pais3);
+                  $('#coin1').text(pais4);
+                  $('#grafico').html(data.Datos);
+
+              }
+          });
+
+          $(".input_c").on("input", function(){
+              var amount1 = $('#currency1').val();
+              var monto = $('#Valor').text();
+              console.log(monto);
+              $.ajax({
+                  url: "{% url 'currency' %}",
+                  method: 'GET',
+                  data: {
+                      amount1: amount1,
+                      monto: monto
+                  },
+                  success: function(data){
+                      $('#currency2').val(data.amount2);
+                  }
+              });
+          });
+      });
+
+
+
+      //2. BUSCA EN YFINANCE EL VALOR DE LA MONEDA A CONVERTIR
+      $("#subir_b").on("click", function() {
+
+          var pais1 = $('#searchInput').val();
+          var pais2 = $('#searchInput2').val();
+
+          $.ajax({
+              url: "{% url 'valormoneda' %}",
+              method: 'GET',
+              data: {
+                  pais1: pais1,
+                  pais2: pais2
+              },
+              success: function(data){
+                  $('#Valor').text(data.valor);
+                  $('#Valor1').text(pais1);
+                  $('#coin1').text(pais2);
+                  $('#grafico').html(data.Datos);
+
+              }
+          });
+      });
+
+      //3. TOMA VARIABLES DEL DROPDOWN
+      $(document).ready(function () {
+          var dropdownMenu = $('#dropdownMenuButton');
+          var searchInput = $('#searchInput');
+          var dropdownSearch = $('#itemUno');
+
+          var dropdownMenu2 = $('#dropdownMenuButton2');
+          var searchInput2 = $('#searchInput2');
+          var dropdownSearch2 = $('#itemDos');
+
+          var almacen = '';
+          var almacen2 = '';
+
+          //4. AL PRESIONAR EL PRIMER DROPDOWN PONE EN BLANCO EL INPUT
+
+          searchInput.click(function(){
+              var inputVal = searchInput.val();
+              if (searchInput.val() === inputVal) {
+                  searchInput.val('');
+              };
+
+              almacen = inputVal;
+          });
+          //5. AL DEJAR DE PRESIONAR EL DROPDOWN VUELVE AL VALOR QUE TENIA
+          searchInput.blur(function(){
+              var inputVal = searchInput.val()
+              if (searchInput.val() === ''){
+                  searchInput.val(almacen);
+              };
+              almacen = inputVal;
+          });
+          //6. EN EL BOTON DROPDOWN AL PRESIONAR PONE EL VALOR DEL INPUT EN BLANCO
+          dropdownMenu.click(function(){
+              var inputVal = searchInput.val();
+              searchInput.show().focus();
+              if (searchInput.val() === inputVal) {
+                  searchInput.val('');
+              };
+          });
+          //7. APLICA UN FILTRO PARA BUSCAR LA MONEDA EN EL LISTADO
+          searchInput.on('input', function(){
+              var filter = $(this).val().toLowerCase();
+
+              $('.dropdown-menu .dropdown-item').each(function(){
+                  var text = $(this).text().toLowerCase();
+                  $(this).toggle(text.indexOf(filter) > -1);
+              });
+          });
+          dropdownSearch.on('click','.dropdown-item', function(e){
+              var choice = $(this).text();
+              searchInput.val(choice);
+          });
+
+          //8. AL PRESIONAR EL DROPDOWN DEJA EN BLANCO EL INPUT
+          searchInput2.click(function(){
+              var inputRest = searchInput2.val();
+              if(searchInput2.val() === inputRest){
+                  searchInput2.val('');
+              };
+              almacen2 = inputRest;
+          });
+          //9. AL DEJAR DE PRESIONAR EL DROPDOWN DEVUELVE EL VALOR QUE TENIA
+          searchInput2.blur(function(){
+              searchInput2.val(almacen2);
+          });
+
+          //10. AL PRESIONAR EL BOTON DROPDOWN DEJA EN BLANCO EL INPUT
+          dropdownMenu2.click(function(){
+              var inputRest = searchInput2.val();
+              searchInput2.show().focus();
+              if (searchInput2.val() === inputRest) {
+                  searchInput2.val('');
+              };
+              almacen2 = inputRest;
+          });
+          //11. APLICA UN FILTRO EN EL SEGUNDO INPUT BUSCANDO EL VALOR DE LA MONEDA DESEADA
+          searchInput2.on('input', function(){
+              var filter = $(this).val().toLowerCase();
+              $('.dropdown-menu .dropdown-item').each(function(){
+                  var text = $(this).text().toLowerCase();
+                  $(this).toggle(text.indexOf(filter) > -1);
+              });
+          });
+          dropdownSearch2.on('click','.dropdown-item', function(){
+              var choice = $(this).text();
+              searchInput2.val(choice);
+          });
+      });
+          //12. INTERCAMBIA EL LUGAR DE LOS PRECIOS
+          $(".cambio_precio").on('click', function(){
+              var unValor = $('#searchInput2').val()
+              var doValor = $('#searchInput').val()
+              $('#searchInput2').val(doValor)
+              $('#searchInput').val(unValor)
+
+              var newDa1 = $('#searchInput').val()
+              var newDa2 = $('#searchInput2').val()
+
+              $.ajax({
+              url: "{% url 'valormoneda' %}",
+              method: 'GET',
+              data: {
+                  pais1: newDa1,
+                  pais2: newDa2
+              },
+              success: function(data){
+                  $('#Valor').text(data.valor);
+                  $('#Valor1').text(newDa1);
+                  $('#coin1').text(newDa2);
+                  $('#grafico').html(data.Datos);
+
+              }
+          });
+          });
+
+</script>
+{% endblock %}
+
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'lib/personal/css/estilo.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/adminelt/plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/adminelt/css/adminlte.css' %}">
+    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    <link rel="shortcut icon" type="image/png" href="{% static 'lib/adminelt/img/AdminLTELogo.png' %}">
+
+    <style>
+        body {
+        font-family: 'Open Sans';font-size: 20px;
+        }
+        label {
+            font-size: 18px;
+        }
+        nav {
+        font-family:'Lato';font-size: 18px;
+        }
+
+        @media screen and (max-width: 700px) {
+            .nav-item {display:none;}
+            .icon {display:block;
+                    float: right;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-light navbar-light shadow p-2" id="navbarCollapse">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="{% url 'home' %}" style="top: 10px;">
+            <i class="bx bxl-python bx-sm text-dark h1"></i>
+            <span class="h3">J</span>
+            <span class="h3 text-primary">S</span>
+        </a>
+        <div class="flex-fill mx-xl-5 mb-2">
+            <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center">
+                <li class="nav-item"><a href="{% url 'home' %}" class="nav-link text-dark">Home</a></li>
+                <li class="nav-item"><a href="{% url 'exchange' %}" class="nav-link text-dark">Calculadora</a></li>
+                <li class="nav-item"><a href="{% url 'Calc' %}" class="nav-link text-dark">Simulador de Credito</a></li>
+                <!--li class="nav-item"><a href="#" class="nav-link text-dark">About Us</a></li-->
+            </ul>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="openNav()">
+            <i class="fa fa-bars text-black"></i>
+        </a>
+
+    </div>
+</nav>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="color:black;">&times;</a>
+  <a href="{% url 'home' %}" class="nav-link" style="color:white;">Home</a>
+  <a href="{% url 'exchange' %}" class="nav-link" style="color:white;">Calculadora</a>
+  <a href="{% url 'Calc' %}" class="nav-link" style="color:white;">Simulador de Credito</a>
+  <a href="#" class="nav-link" style="color:white;">About Us</a>
+</div>
+
+{% block content %}
+
+{% endblock %}
+<script src="{% static 'lib/adminelt/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'lib/adminelt/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'lib/adminelt/js/adminlte.min.js' %}"></script>
+<script>
+    function openNav() {
+  document.getElementById("mySidenav").style.width = "200px";
+  $('.icon').toggle();
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  $('.icon').toggle();
+}
+
+
+
+</script>
+</body>
+</html>

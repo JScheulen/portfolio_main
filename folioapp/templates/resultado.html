@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+{% extends 'header.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container pt-5"></div>
+<div class="container pt-3">
+    <div class="row p-5 m-2">
+        <div class="col-lg mx-auto shadow border" style="border-radius: 20px; text-align: center">
+            <h1 style="text-align: center;">Resultado de calculo</h1>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <div class="row p-2 m-5"><span class="mx-auto">Usted esta Calculando un Credito con las siguientes Caracteristicas</span></div>
+                    <div class="row m-3">
+                        <div class="col">Monto del Credito</div>
+                        <div class="col">Plazo</div>
+                        <div class="col">Tasa Mensual</div>
+                        <div class="col">Tasa de interes Anual</div>
+                    </div>
+                    <div class="row m-3">
+                        <div class="col">{{result.monto}}</div>
+                        <div class="col">{{result.plazo}}</div>
+                        <div class="col">{{result.tasaMes}}%</div>
+                        <div class="col">{{result.tasa}}</div>
+                    </div>
+                    <hr class="m-3">
+                    <div class="row m-5"><span class="mx-auto">Resultados del Calculo</span></div>
+                    <div class="row border m-5">
+                        <div class="col">
+                            <div class="row border"><span class="m-2">Monto a Pagar Mensualmente: {{result.pagaMes}}</span></div>
+                            <div class="row border"><span class="m-2">Monto a Total de Deuda: {{result.totalduda}}</span></div>
+                            <div class="row border"><span class="m-2">Total Interes a Pagar: {{result.total_interes}}</span></div>
+                            <div class="row border"><span class="m-2">Capital Total a Pagar: {{result.monto}}</span></div>
+                        </div>
+                    </div>
+                    <div class="row m-2">
+                        <div class="col">Deuda Inicial</div>
+                        <div class="col">Pago a Capital</div>
+                        <div class="col">Pago de Interes</div>
+                        <div class="col">Cuota Mensual a Pagar</div>
+                    </div>
+                    <div class="row m-1" style="text-indent: 80px;">
+                        <div class="col">
+                            {% for n in tabla.DeudaInicial %}
+                                <div class="row border">{{n}}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            {% for n in tabla.deudames %}
+                                <div class="row border">{{n}}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            {% for n in tabla.interesmes %}
+                                <div class="row border">{{n}}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            {% for n in tabla.pagomes %}
+                                <div class="row border">{{n}} </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+</html>
